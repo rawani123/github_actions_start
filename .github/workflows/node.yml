@@ -1,28 +1,14 @@
-name: NodeJS CI Pipeline
-
-on: 
-  push:
-    branches: [main]
+name: sequential run 
+on: push
 
 jobs:
-  building:
+  build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18, 20]
-    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - run: echo "Building"
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with: 
-          node-version: ${{ matrix.node-version }}
-
-      - name: Check Node version
-        run: node -v
-
-      - name: Print message
-        run: echo "CI is working 🚀"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying"
